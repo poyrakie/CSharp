@@ -1,6 +1,6 @@
 ﻿namespace SubmissionTask.Interfaces;
 
-internal interface IMainMenu
+public interface IMenuService
 {
     void ShowMainMenu();
 }

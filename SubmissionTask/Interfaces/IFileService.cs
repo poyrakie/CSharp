@@ -1,7 +1,7 @@
 ﻿namespace SubmissionTask.Interfaces;
 
-internal interface IFileService
+public interface IFileService
 {
-    void SaveToFile();
-    string LoadFromFile();
+    bool SaveToFile(string filePath, string content);
+    string LoadFromFile(string filePath);
 }

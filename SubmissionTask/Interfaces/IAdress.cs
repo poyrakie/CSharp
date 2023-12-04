@@ -1,6 +1,6 @@
 ﻿namespace SubmissionTask.Interfaces;
 
-internal interface IAddress
+public interface IAddress
 {
     string City { get; set; }
     string Road { get; set; }
