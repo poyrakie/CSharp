@@ -2,7 +2,7 @@
 
 namespace SubmissionTask.Models;
 
-internal class Address : IAddress
+public class Address : IAddress
 {
     public string City { get; set; } = null!;
     public string Road { get; set; } = null!;

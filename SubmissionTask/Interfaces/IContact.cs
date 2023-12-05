@@ -1,4 +1,6 @@
-﻿namespace SubmissionTask.Interfaces;
+﻿
+
+namespace SubmissionTask.Interfaces;
 
 public interface IContact
 {
