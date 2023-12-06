@@ -3,7 +3,7 @@
 public interface IContactService
 {
     bool AddToList();
-    bool ShowAllContact();
+    bool ShowAllContacts();
     bool UpdateContact();
     bool DeleteContact();
 }

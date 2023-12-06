@@ -1,19 +1,18 @@
 ﻿using SubmissionTask.Interfaces;
 using SubmissionTask.Models;
-using SubmissionTask.Repositories;
-using System.Net;
-using System.Runtime.CompilerServices;
 
 namespace SubmissionTask.Services;
 
 public class MenuService : IMenuService
 {
+    private readonly IContactService _contactService;
     private readonly IContact _contact;
     private readonly IAddress _address;
-    private readonly ContactRepository _contactRepository;
+    private readonly IContactRepository _contactRepository;
 
-    public MenuService(ContactRepository contactRepository, IContact contact, IAddress address)
+    public MenuService(IContactService contactService, IContactRepository contactRepository, IContact contact, IAddress address)
     {
+        _contactService = contactService;
         _contactRepository = contactRepository;
         _contact = contact;
         _contact.Address = address;
@@ -39,7 +38,7 @@ public class MenuService : IMenuService
             {
                 MenuListForSwitchCase(i, menu[i]);
             }
-            Console.WriteLine("\t0.\tExit program");
+            Console.WriteLine($"{"", -10}{"0.", -10}Exit program");
             string answer = Console.ReadLine()!;
             switch (answer)
             {
@@ -67,18 +66,7 @@ public class MenuService : IMenuService
         {
             Console.Clear();
             MenuTitle("CONTACTS MENU");
-            foreach(Contact contact in _contactRepository.GetAllFromList())
-            {
-                Console.WriteLine("\t---------------------------------");
-                Console.WriteLine($"\tFull name: {contact.FirstName} {contact.LastName}");
-                Console.WriteLine($"\tEmail-address: {contact.Email}");
-                Console.WriteLine($"\tPhone-number: {contact.PhoneNumber}");
-                Console.WriteLine("\tAddress:");
-                Console.WriteLine($"\t\tHouse: {contact.Address.Road} - {contact.Address.HouseNumber}");
-                Console.WriteLine($"\t\tPostal code: {contact.Address.PostalCode}");
-                Console.WriteLine($"\t\tCity: {contact.Address.City}");
-                Console.WriteLine("\t---------------------------------");
-            }
+            _contactService.ShowAllContacts();
             Console.WriteLine("\tPress any key to return to main menu");
             Console.ReadKey();
             ShowMainMenu();
@@ -109,81 +97,33 @@ public class MenuService : IMenuService
                 MenuList(menu[i]);
             }
             Console.ReadKey();
-            AddContactPrompt("first name");
-            _contact.FirstName = Console.ReadLine()!.Trim();
-            if (!string.IsNullOrEmpty(_contact.FirstName))
+            if (_contactService.AddToList())
             {
-                _contact.FirstName = char.ToUpper(_contact.FirstName[0]) + _contact.FirstName.Substring(1);
-                AddContactPrompt("last name");
-                _contact.LastName = Console.ReadLine()!.Trim();
-                if (!string.IsNullOrEmpty(_contact.LastName))
-                {
-                    _contact.LastName = char.ToUpper(_contact.LastName[0]) + _contact.LastName.Substring(1);
-                    AddContactPrompt("email-address");
-                    _contact.Email = Console.ReadLine()!.Trim();
-                    if (!string.IsNullOrEmpty(_contact.Email))
-                    {
-                        AddContactPrompt("phone-number");
-                        _contact.PhoneNumber = Console.ReadLine()!.Trim();
-                        if (!string.IsNullOrEmpty(_contact.PhoneNumber))
-                        {
-                            Console.Clear();
-                            MenuTitle("ADD CONTACT");
-                            Console.WriteLine("\t\tSo far i've gotten");
-                            Console.WriteLine($"\t\tFirst name: {_contact.FirstName}");
-                            Console.WriteLine($"\t\tLast name: {_contact.LastName}");
-                            Console.WriteLine($"\t\tEmail-address: {_contact.Email}");
-                            Console.WriteLine("\t\tLets Continue with the address of your new contact");
-                            AddContactPrompt("city");
-                            _contact.Address.City = Console.ReadLine()!.Trim();
-                            if (!string.IsNullOrEmpty(_contact.Address.City))
-                            {
-                                _contact.Address.City = char.ToUpper(_contact.Address.City[0]) + _contact.Address.City.Substring(1);
-                                AddContactPrompt("road");
-                                _contact.Address.Road = Console.ReadLine()!.Trim();
-                                if (!string.IsNullOrEmpty(_contact.Address.Road))
-                                {
-                                    _contact.Address.Road = char.ToUpper(_contact.Address.Road[0]) + _contact.Address.Road.Substring(1);
-                                    AddContactPrompt("house number");
-                                    _contact.Address.HouseNumber = Console.ReadLine()!.Trim();
-                                    if (!string.IsNullOrEmpty(_contact.Address.HouseNumber))
-                                    {
-                                        AddContactPrompt("postal code");
-                                        string userInput = Console.ReadLine()!.Trim();
-                                        if (int.TryParse(userInput, out int result))
-                                        {
-                                            _contact.Address.PostalCode = result;
-                                            if (_contactRepository.AddToList(_contact))
-                                            {
-                                                Console.Clear();
-                                                MenuTitle("ADD CONTACT");
-                                                Console.WriteLine("Contact added successfully");
-                                                for (int i = 0; i < successMenu.Length; i++)
-                                                {
-                                                    MenuListForSwitchCase(i, successMenu[i]);
-                                                }
-                                                string answer = Console.ReadLine()!;
-                                                switch (answer)
-                                                {
-                                                    case "1":
-                                                        ShowMainMenu();
-                                                        break;
-                                                    case "2":
-                                                        break;
-                                                    default:
-                                                        Console.WriteLine("Invalid input registered, returning to main menu");
-                                                        Console.ReadKey();
-                                                        ShowMainMenu();
-                                                        break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                Console.WriteLine("Contact added successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Something went wrong. Please try again");
+            }
+            Console.ReadKey();
+            Console.Clear();
+            for (int i = 0; i < successMenu.Length; i++)
+            {
+                MenuListForSwitchCase(i, successMenu[i]);
+            }
+            string answer = Console.ReadLine()!;
+            switch (answer)
+            {
+                case "1":
+                    ShowMainMenu();
+                    break;
+                case "2":
+                    break;
+                default:
+                    Console.WriteLine("Invalid input registered, returning to main menu");
+                    Console.ReadKey();
+                    ShowMainMenu();
+                    break;
             }
         }
     }
@@ -199,10 +139,7 @@ public class MenuService : IMenuService
     }
     private void MenuListForSwitchCase(int i, string listItem)
     {
-        Console.WriteLine($"\t{i + 1}. \t{listItem}");
-    }
-    private void AddContactPrompt(string prompt)
-    {
-        Console.Write($"\t\tPlease enter the {prompt} of your new contact: ");
+        int j = i + 1;
+        Console.WriteLine($"{"", -10}{j+".", -9} {listItem}");
     }
 }

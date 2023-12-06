@@ -5,29 +5,36 @@ namespace SubmissionTask.Services;
 
 public class FileService : IFileService
 {
-    public string LoadFromFile(string filePath)
+    private readonly string _filePath = @"C:\Programmering\EC\CSharp\SubmissionTask\content.json";
+
+    public bool SaveToFile(string content)
     {
         try
         {
-            if (File.Exists(filePath))
+            using (var sw = new StreamWriter(_filePath))
             {
-                using var sr = new StreamReader(filePath);
-                return sr.ReadToEnd();
+                sw.WriteLine(content);
+            }
+
+            return true;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return false;
+    }
+    public string LoadFromFile()
+    {
+        try
+        {
+            if (File.Exists(_filePath))
+            {
+                using (var sr = new StreamReader(_filePath))
+                {
+                    return sr.ReadToEnd();
+                }
+                    
             }
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
     }
-
-    public bool SaveToFile(string filePath, string content)
-    {
-        try
-        {
-            using var sw = new StreamWriter(filePath);
-            sw.WriteLine(content);
-            return true;
-        }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        return false;
-    }   
 }

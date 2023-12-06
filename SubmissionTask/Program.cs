@@ -6,8 +6,9 @@ using SubmissionTask.Repositories;
 using SubmissionTask.Services;
 
 var builder = Host.CreateDefaultBuilder().ConfigureServices(services =>
-{ 
-    services.AddSingleton<ContactRepository>();
+{
+    services.AddSingleton<IContactService, ContactService>();
+    services.AddSingleton<IContactRepository, ContactRepository>();
     services.AddSingleton<IFileService, FileService>();
     services.AddSingleton<IMenuService, MenuService>();
     services.AddSingleton<IContact, Contact>();

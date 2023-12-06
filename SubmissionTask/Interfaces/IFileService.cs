@@ -2,6 +2,6 @@
 
 public interface IFileService
 {
-    bool SaveToFile(string filePath, string content);
-    string LoadFromFile(string filePath);
+    bool SaveToFile(string content);
+    string LoadFromFile();
 }
