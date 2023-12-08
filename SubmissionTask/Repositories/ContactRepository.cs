@@ -5,17 +5,29 @@ using System.Diagnostics;
 
 namespace SubmissionTask.Repositories;
 
+///<summary>
+/// En repository för contacts som implementerar interface IContactRepository.
+/// Ansvarar för att lägga till, hämta, ta bort och skanna kontakter från Fileservice.
+///</summary>
 public class ContactRepository : IContactRepository
 {
     private List<IContact> _contactList;
     private readonly IFileService _fileService;
 
+    ///<summary>
+    /// Konstruktor som tar emot IFileService för filhantering
+    /// initialerar kontaktlistan genom att hämta befintliga kontakter från fileservice
+    ///</summary>
     public ContactRepository(IFileService fileService)
     {
         _fileService = fileService;
         _contactList = GetAllFromList().ToList();
     }
 
+    ///<summary>
+    /// Lägger till en kontakt i listan om kontaktens email inte redan finns.
+    /// Uppdaterar filen och returnerar bool motsvarande operationens framgång
+    ///</summary>
     public bool AddToList(IContact contact)
     {
         try
@@ -43,6 +55,10 @@ public class ContactRepository : IContactRepository
             return false; 
         }
     }
+
+    ///<summary>
+    /// Hämtar alla kontakter från fileservice och returnerar dom som IEnumerable lista
+    ///</summary>
     public IEnumerable<IContact> GetAllFromList()
     {
         try
@@ -67,6 +83,10 @@ public class ContactRepository : IContactRepository
         return null!;
     }
 
+    ///<summary>
+    /// Tar bort en kontakt från listan baserat på e-postadress och index. 
+    /// Uppdaterar lagringsplatsen och returnerar bool motsvarande operationens framgång
+    ///</summary>
     public bool RemoveFromList(string email, int i)
     {
         try
@@ -91,6 +111,10 @@ public class ContactRepository : IContactRepository
         return false;
     }
 
+    ///<summary>
+    /// Skannar listan för att kontrollera om en kontakt med angiven e-postadress finns.
+    /// Returnerar true om kontakten finns, annars false.
+    ///</summary>
     public bool ScanListForEmail(string email)
     {
         try

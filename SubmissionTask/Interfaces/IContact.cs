@@ -1,7 +1,9 @@
-﻿
+﻿namespace SubmissionTask.Interfaces;
 
-namespace SubmissionTask.Interfaces;
-
+///<summary>
+/// Representerar ett kontaktinterface.
+/// Innehåller egenskaper för olika attribut relaterade till en kontakt.
+///</summary>
 public interface IContact
 {
     string FirstName { get; set; }

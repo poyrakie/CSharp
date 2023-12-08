@@ -2,6 +2,10 @@
 
 namespace SubmissionTask.Models;
 
+///<summary>
+/// Representerar en kontaktmodel och implementerar interface IContact.
+/// Innehåller egenskaper för olika attribut relaterade till en kontakt.
+///</summary>
 public class Contact : IContact
 {
     public string FirstName { get; set; } = null!;

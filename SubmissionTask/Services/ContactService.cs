@@ -7,9 +7,19 @@ using System.Text.RegularExpressions;
 
 namespace SubmissionTask.Services;
 
+///<summary>
+/// Service för hantering av kontakter och använder interface IContactService.
+/// Ansvarar för att lägga till, visa, ta bort och visa detaljer för kontakter,
+/// samt utföra validering av användarinput
+///</summary>
 public class ContactService(IContactRepository contactRepository) : IContactService
 {
     private readonly IContactRepository _contactRepository = contactRepository;
+
+    ///<summary>
+    /// Lägger till en ny kontakt i systemet genom att guida användaren genom att ange giltig information för varje kontaktattribut. 
+    /// Returnerar bool motsvarande operationens framgång.
+    ///</summary>
     public bool AddToList()
     {
         string[] propertyName =
@@ -59,15 +69,20 @@ public class ContactService(IContactRepository contactRepository) : IContactServ
         }
     }
 
+    ///<summary>
+    /// Tar bort en befintlig kontakt baserat på användarinput och kontaktindex.
+    /// Bekräftas med användarinput för Email.
+    /// Returnerar bool motsvarande operationens framgång
+    ///</summary>
     public bool DeleteContact(int i)
     {
         try
         {
-            Console.Write("Are you sure you want to delete this contact(y/n)? ");
-            string input = Console.ReadLine()!.ToLower();
-            if(input == "y")
+            Console.Write("Are you sure you want to delete this contact(press y to confirm)? ");
+            var input = Console.ReadKey().Key;
+            if(input == ConsoleKey.Y)
             {
-                Console.Write("Please confirm by typing the email of the contact: ");
+                Console.Write("\nPlease confirm by typing the email of the contact: ");
                 string email = Console.ReadLine()!;
                 if(_contactRepository.RemoveFromList(email, i))
                 {
@@ -90,6 +105,10 @@ public class ContactService(IContactRepository contactRepository) : IContactServ
         return false;
     }
 
+    ///<summary>
+    /// Visar en lista över alla befintliga kontakter.
+    /// Returnerar bool motsvarande operationens framgång
+    ///</summary>
     public bool ShowAllContacts()
     {
         try
@@ -111,6 +130,10 @@ public class ContactService(IContactRepository contactRepository) : IContactServ
         }
     }
 
+    ///<summary>
+    /// Visar detaljer för en specifik kontakt baserat på kontaktindex.
+    /// Returnerar bool motsvarande operationens framgång
+    ///</summary>
     public bool ShowContact(int i)
     {
         try
@@ -133,6 +156,9 @@ public class ContactService(IContactRepository contactRepository) : IContactServ
         }
     }
 
+    ///<summary>
+    /// Hjälpmetod för att ange giltig information för ett kontaktattribut.
+    ///</summary>
     private void SetValidInput(Func<string> getProperty, Action<string> setProperty, string property)
     {
         while (true)
@@ -151,6 +177,10 @@ public class ContactService(IContactRepository contactRepository) : IContactServ
             }
         }
     }
+
+    ///<summary>
+    /// Hjälpmetod för att ange giltig information för ett kontaktattribut med användning av regex.
+    ///</summary>
     private void SetValidInputWithRegex(Func<string> getProperty, Action<string> setProperty, string property, string regexPattern)
     {
         while (true)
@@ -178,6 +208,10 @@ public class ContactService(IContactRepository contactRepository) : IContactServ
             }
         }
     }
+
+    ///<summary>
+    /// Hjälpmetod för att ange giltig e-postadress och kontrollera om den redan finns i systemet.
+    ///</summary>
     private void SetValidInputForEmail(Func<string> getProperty, Action<string> setProperty, string property, string regexPattern)
     {
         while (true)

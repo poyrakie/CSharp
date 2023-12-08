@@ -1,12 +1,18 @@
 ﻿using SubmissionTask.Interfaces;
-using SubmissionTask.Models;
 
 namespace SubmissionTask.Services;
-
+///<summary>
+/// Service som ansvarar för att hantera menyer och användarinteraktion i applikationen
+/// implementerar interfaces IMenuService
+///</summary>
 public class MenuService(IContactService contactService) : IMenuService
 {
     private readonly IContactService _contactService = contactService;
 
+    /// <summary>
+    /// Visar huvudmenyn med alternativ att gå vidare till andra submenyer, eller avsluta programmet.
+    /// Användarinputen valideras och lämpliga åtgärder vid registrering av felaktig input vidtas.
+    /// </summary>
     public void ShowMainMenu()
     {
         string[] menu =
@@ -22,18 +28,16 @@ public class MenuService(IContactService contactService) : IMenuService
                 MenuListForSwitchCase(i, menu[i]);
             }
             Console.WriteLine($"{"0.", -10}Exit program");
-            string answer = Console.ReadLine()!;
+            var answer = Console.ReadKey().Key;
             switch (answer)
             {
-                case "1":
+                case ConsoleKey.D1:
                     ShowAllContacts();
                     break;
-                case "2":
+                case ConsoleKey.D2:
                     AddContactMenu();
                     break;
-                case "3":
-                    break;
-                case "0":
+                case ConsoleKey.D0:
                     Environment.Exit(0);
                     break;
                 default:
@@ -43,6 +47,12 @@ public class MenuService(IContactService contactService) : IMenuService
             }
         }
     }
+
+    ///<summary>
+    /// visar lista över alla kontakter. 
+    /// Användaren har möjlighet att inspektera enskild kontakt eller återgå till huvudmenyn
+    /// Hanterar användarinput och navigering därefter
+    ///</summary>
     private int ShowAllContacts()
     {
         while (true)
@@ -65,6 +75,11 @@ public class MenuService(IContactService contactService) : IMenuService
                 
         }
     }
+
+    ///<summary>
+    /// Visar detaljerad information om specifik kontakt.
+    /// Användaren har möjlighet att ta bort kontakten eller återgå till andra menyer
+    ///</summary>
     private void ShowContact(int i)
     {
         while(true)
@@ -73,16 +88,16 @@ public class MenuService(IContactService contactService) : IMenuService
             if (_contactService.ShowContact(i))
             {
                 Console.WriteLine("Would you like to delete this contact(1), return to show all contacts(2) or return to main menu(0)?");
-                string answer = Console.ReadLine()!;
+                var answer = Console.ReadKey().Key;
                 switch (answer)
                 {
-                    case "1":
+                    case ConsoleKey.D1:
                         RemoveContactMenu(i);
                         break;
-                    case "2":
+                    case ConsoleKey.D2:
                         ShowAllContacts();
                         break;
-                    case "0":
+                    case ConsoleKey.D0:
                         ShowMainMenu();
                         break;
                     default:
@@ -100,6 +115,11 @@ public class MenuService(IContactService contactService) : IMenuService
             }
         }
     }
+
+    ///<summary>
+    /// Visar menyn för att lägga till en kontakt, en guidande text för att förberreda användaren att ha rätt uppgifter om kontakten.
+    /// Hanterar kontakttillägget och vidarnavigation
+    ///</summary>
     private void AddContactMenu() 
     {
         string[] menu =
@@ -139,13 +159,13 @@ public class MenuService(IContactService contactService) : IMenuService
             {
                 MenuListForSwitchCase(i, successMenu[i]);
             }
-            string answer = Console.ReadLine()!;
+            var answer = Console.ReadKey().Key;
             switch (answer)
             {
-                case "1":
+                case ConsoleKey.D1:
                     ShowMainMenu();
                     break;
-                case "2":
+                case ConsoleKey.D2:
                     break;
                 default:
                     Console.Write("Invalid input registered, returning to main menu");
@@ -155,6 +175,11 @@ public class MenuService(IContactService contactService) : IMenuService
             }
         }
     }
+
+    ///<summary>
+    /// Visar menyn för att ta bort en kontakt och ger möjlighet att bekräfta raderingen av kontakten.
+    /// Hanterar användarinput och utför borttagningen om den bekräftas.
+    ///</summary>
     private void RemoveContactMenu(int i)
     {
         MenuTitle("REMOVE CONTACT");
@@ -175,16 +200,28 @@ public class MenuService(IContactService contactService) : IMenuService
             ShowAllContacts();
         }
     }
+
+    ///<summary>
+    /// Hjälpmetod för att visa formatering av menytitel
+    ///</summary>
     private void MenuTitle(string menu)
     {
         Console.Clear();
         Console.WriteLine($"\t******{menu}******");
         Console.WriteLine();
     }
+
+    ///<summary>
+    /// Hjälpmetod för att visa en lista
+    ///</summary>
     private void MenuList(string listItem)
     {
         Console.WriteLine($"-\t{listItem}");
     }
+
+    ///<summary>
+    /// Hjälpmetod för att visa en lista med ett motsvarande nummer för switch-cases
+    ///</summary>
     private void MenuListForSwitchCase(int i, string listItem)
     {
         int j = i + 1;
