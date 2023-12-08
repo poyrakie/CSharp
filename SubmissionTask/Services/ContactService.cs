@@ -1,100 +1,106 @@
 ﻿using SubmissionTask.Interfaces;
+using SubmissionTask.Models;
 using SubmissionTask.Repositories;
 using System.Diagnostics;
+using System.Net;
+using System.Text.RegularExpressions;
 
 namespace SubmissionTask.Services;
 
-public class ContactService : IContactService
+public class ContactService(IContactRepository contactRepository) : IContactService
 {
-    private readonly IContactRepository _contactRepository;
-    private readonly IContact _contact;
-    public ContactService(IContactRepository contactRepository, IContact contact)
-    {
-        _contactRepository = contactRepository;
-        _contact = contact;
-    }
+    private readonly IContactRepository _contactRepository = contactRepository;
     public bool AddToList()
     {
+        string[] propertyName =
+        {
+            "First Name",
+            "Last Name",
+            "Email-address",
+            "Phone-number",
+            "City",
+            "Road",
+            "Housenumber",
+            "Postalcode"
+        };
+        string[] regexPattern =
+        {
+            @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+            @"^\d{5}(?:-\d{5})?$"
+        };
+        IContact contact = new Contact();
         try
         {
-            AddContactPrompt("first name");
-            _contact.FirstName = Console.ReadLine()!.Trim();
-            if (!string.IsNullOrEmpty(_contact.FirstName))
+            SetValidInput(() => Console.ReadLine()?.Trim()!, val => contact.FirstName = val, propertyName[0]);
+            SetValidInput(() => Console.ReadLine()?.Trim()!, val => contact.LastName = val, propertyName[1]);
+            SetValidInputForEmail(() => Console.ReadLine()?.Trim()!, val => contact.Email = val, propertyName[2], regexPattern[0]);
+            SetValidInput(() => Console.ReadLine()?.Trim()!, val => contact.PhoneNumber = val, propertyName[3]);
+
+            Console.WriteLine("\nSo far, you've entered:");
+            Console.WriteLine($"Name: {contact.FirstName} {contact.LastName}");
+            Console.WriteLine($"Email: <{contact.Email}>");
+            Console.WriteLine($"Phone number: {contact.PhoneNumber}\n");
+            
+            SetValidInput(() => Console.ReadLine()?.Trim()!, val => contact.City = val, propertyName[4]);
+            SetValidInput(() => Console.ReadLine()?.Trim()!, val => contact.Road = val, propertyName[5]);
+            SetValidInput(() => Console.ReadLine()?.Trim()!, val => contact.HouseNumber = val, propertyName[6]);
+            SetValidInputWithRegex(() => Console.ReadLine()?.Trim()!, val => contact.PostalCode = val, propertyName[7], regexPattern[1]);
+
+            if (_contactRepository.AddToList(contact))
             {
-                _contact.FirstName = char.ToUpper(_contact.FirstName[0]) + _contact.FirstName.Substring(1);
-                AddContactPrompt("last name");
-                _contact.LastName = Console.ReadLine()!.Trim();
-                if (!string.IsNullOrEmpty(_contact.LastName))
-                {
-                    _contact.LastName = char.ToUpper(_contact.LastName[0]) + _contact.LastName.Substring(1);
-                    AddContactPrompt("email-address");
-                    _contact.Email = Console.ReadLine()!.Trim();
-                    if (!string.IsNullOrEmpty(_contact.Email))
-                    {
-                        AddContactPrompt("phone-number");
-                        _contact.PhoneNumber = Console.ReadLine()!.Trim();
-                        if (!string.IsNullOrEmpty(_contact.PhoneNumber))
-                        {
-                            Console.WriteLine();
-                            Console.WriteLine("\t\tSo far i've gotten");
-                            Console.WriteLine($"\t\tFirst name: {_contact.FirstName}");
-                            Console.WriteLine($"\t\tLast name: {_contact.LastName}");
-                            Console.WriteLine($"\t\tEmail-address: {_contact.Email}");
-                            Console.WriteLine("\t\tLets Continue with the address of your new contact");
-                            AddContactPrompt("city");
-                            _contact.Address.City = Console.ReadLine()!.Trim();
-                            if (!string.IsNullOrEmpty(_contact.Address.City))
-                            {
-                                _contact.Address.City = char.ToUpper(_contact.Address.City[0]) + _contact.Address.City.Substring(1);
-                                AddContactPrompt("road");
-                                _contact.Address.Road = Console.ReadLine()!.Trim();
-                                if (!string.IsNullOrEmpty(_contact.Address.Road))
-                                {
-                                    _contact.Address.Road = char.ToUpper(_contact.Address.Road[0]) + _contact.Address.Road.Substring(1);
-                                    AddContactPrompt("house number");
-                                    _contact.Address.HouseNumber = Console.ReadLine()!.Trim();
-                                    if (!string.IsNullOrEmpty(_contact.Address.HouseNumber))
-                                    {
-                                        AddContactPrompt("postal code");
-                                        string userInput = Console.ReadLine()!.Trim();
-                                        if (int.TryParse(userInput, out int result))
-                                        {
-                                            _contact.Address.PostalCode = result;
-                                            if (_contactRepository.AddToList(_contact))
-                                            {
-                                                return true;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                return true;
             }
             return false;
         }
-        catch (Exception ex) 
+        catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
             return false;
         }
     }
 
-    public bool DeleteContact()
+    public bool DeleteContact(int i)
     {
-        throw new NotImplementedException();
+        try
+        {
+            Console.Write("Are you sure you want to delete this contact(y/n)? ");
+            string input = Console.ReadLine()!.ToLower();
+            if(input == "y")
+            {
+                Console.Write("Please confirm by typing the email of the contact: ");
+                string email = Console.ReadLine()!;
+                if(_contactRepository.RemoveFromList(email, i))
+                {
+                    Console.Write("Contact was deleted succesfully, returning to show all contacts ");
+                    return true;
+                }
+                else
+                {
+                    Console.Write("Email is not a match for the contact. Returning to show all contacts ");
+                    return false;
+                }
+            }
+            else
+            {
+                Console.Write("Returning to show all contacts");
+                return false;
+            }
+        }
+        catch (Exception ex){ Debug.WriteLine(ex.Message); }
+        return false;
     }
 
     public bool ShowAllContacts()
     {
         try
         {
+            int i = 1;
             foreach (IContact contact in _contactRepository.GetAllFromList())
             {
-                Console.WriteLine($"{"", -10}----------------------------");
-                Console.WriteLine($"{"",-10}{"Contact name: ", -10}{contact.FirstName} {contact.FirstName}");
-                Console.WriteLine($"{"",-10}----------------------------\n");
+                Console.WriteLine("-----------------------------------");
+                Console.WriteLine($"{i+"."}{"Contact name: ", -10}{contact.FirstName} {contact.LastName}");
+                Console.WriteLine("-----------------------------------\n");
+                i++;
             }
             return true;
         }
@@ -105,12 +111,105 @@ public class ContactService : IContactService
         }
     }
 
-    public bool UpdateContact()
+    public bool ShowContact(int i)
     {
-        throw new NotImplementedException();
+        try
+        {
+            List<IContact> contactList = _contactRepository.GetAllFromList().ToList();
+            IContact contact = contactList[i];
+            Console.WriteLine($"Name: {contact.FirstName} {contact.LastName}");
+            Console.WriteLine($"Email: <{contact.Email}>");
+            Console.WriteLine($"Phonenumber: {contact.PhoneNumber}");
+            Console.WriteLine($"{"",-5}Address: ");
+            Console.WriteLine($"{"",-10}House: {contact.Road} {contact.HouseNumber}");
+            Console.WriteLine($"{"",-10}Postalcode: {contact.PostalCode}");
+            Console.WriteLine($"{"",-10}City: {contact.City}");
+            return true;
+        }
+        catch(Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return false;
+        }
     }
-    private void AddContactPrompt(string prompt)
+
+    private void SetValidInput(Func<string> getProperty, Action<string> setProperty, string property)
     {
-        Console.Write($"\t\tPlease enter the {prompt} of your new contact: ");
+        while (true)
+        {
+            Console.Write($"{property}: ");
+            var input = Console.ReadLine();
+            if (!string.IsNullOrEmpty( input ) )
+            {
+                input = char.ToUpper(input[0]) + input.Substring(1);
+                setProperty( input );
+                break;
+            }
+            else
+            {
+                Console.WriteLine($"{property} may not be empty");
+            }
+        }
+    }
+    private void SetValidInputWithRegex(Func<string> getProperty, Action<string> setProperty, string property, string regexPattern)
+    {
+        while (true)
+        {
+            string _regex = regexPattern;
+            Console.Write($"{property}: ");
+            var input = Console.ReadLine();
+            if (!string.IsNullOrEmpty(input))
+            {
+                Regex regex = new(_regex);
+                bool isMatch = regex.IsMatch( input );
+                if (isMatch)
+                {
+                    setProperty( input );
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine($"{input} is not a valid {property}");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"{property} may not be empty");
+            }
+        }
+    }
+    private void SetValidInputForEmail(Func<string> getProperty, Action<string> setProperty, string property, string regexPattern)
+    {
+        while (true)
+        {
+            string _regex = regexPattern;
+            Console.Write($"{property}: ");
+            var input = Console.ReadLine();
+            if (!string.IsNullOrEmpty(input))
+            {
+                Regex regex = new(_regex);
+                bool isMatch = regex.IsMatch(input);
+                if (isMatch)
+                {
+                    if (_contactRepository.ScanListForEmail(input))
+                    {
+                        Console.WriteLine($"{input} already exsists, email must be unique");
+                    }
+                    else
+                    {
+                        setProperty(input);
+                        break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"{input} is not a valid {property}");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"{property} may not be empty");
+            }
+        }
     }
 }

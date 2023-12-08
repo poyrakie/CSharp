@@ -4,6 +4,6 @@ public interface IContactService
 {
     bool AddToList();
     bool ShowAllContacts();
-    bool UpdateContact();
-    bool DeleteContact();
+    bool ShowContact(int i);
+    bool DeleteContact(int i);
 }
