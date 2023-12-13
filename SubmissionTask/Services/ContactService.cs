@@ -69,6 +69,7 @@ public class ContactService(IContactRepository contactRepository) : IContactServ
         }
     }
 
+
     ///<summary>
     /// Tar bort en befintlig kontakt baserat på användarinput och kontaktindex.
     /// Bekräftas med användarinput för Email.
