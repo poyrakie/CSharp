@@ -1,1 +1,1 @@
-[{"$type":"SubmissionTask.Models.Contact, SubmissionTask","FirstName":"Johan","LastName":"Åström","Email":"Johan@domain.com","PhoneNumber":"0723131277","City":"Asarum","Road":"Frälsegårdsvägen","HouseNumber":"29","PostalCode":"37450"}]
+[{"$type":"SubmissionTask.ClassLibrary.Models.Contact, SubmissionTask.ClassLibrary","FirstName":"Johan","LastName":"Åström","Email":"johan@domain.com","PhoneNumber":"0723131277","City":"Asarum","Road":"Frälsegårdsvägen","HouseNumber":"29","PostalCode":"37450"}]

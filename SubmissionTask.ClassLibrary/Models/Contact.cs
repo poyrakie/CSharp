@@ -1,6 +1,6 @@
-﻿using SubmissionTask.Interfaces;
+﻿using SubmissionTask.ClassLibrary.Interfaces;
 
-namespace SubmissionTask.Models;
+namespace SubmissionTask.ClassLibrary.Models;
 
 ///<summary>
 /// Representerar en kontaktmodel och implementerar interface IContact.

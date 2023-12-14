@@ -1,4 +1,4 @@
-﻿namespace SubmissionTask.Interfaces;
+﻿namespace SubmissionTask.ClassLibrary.Interfaces;
 
 ///<summary>
 /// Representerar ett kontaktinterface.

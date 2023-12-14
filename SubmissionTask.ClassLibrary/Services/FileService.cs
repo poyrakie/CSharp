@@ -1,7 +1,7 @@
-﻿using SubmissionTask.Interfaces;
+﻿using SubmissionTask.ClassLibrary.Interfaces;
 using System.Diagnostics;
 
-namespace SubmissionTask.Services;
+namespace SubmissionTask.ClassLibrary.Services;
 
 ///<summary>
 /// Service för filhantering, implementerar interface IFileService.

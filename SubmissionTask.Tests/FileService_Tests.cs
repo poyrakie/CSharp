@@ -1,5 +1,5 @@
-﻿using SubmissionTask.Interfaces;
-using SubmissionTask.Services;
+﻿using SubmissionTask.ClassLibrary.Interfaces;
+using SubmissionTask.ClassLibrary.Services;
 
 namespace SubmissionTask.Tests;
 

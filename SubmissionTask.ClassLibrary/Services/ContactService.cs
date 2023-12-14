@@ -1,11 +1,9 @@
-﻿using SubmissionTask.Interfaces;
-using SubmissionTask.Models;
-using SubmissionTask.Repositories;
+﻿using SubmissionTask.ClassLibrary.Interfaces;
+using SubmissionTask.ClassLibrary.Models;
 using System.Diagnostics;
-using System.Net;
 using System.Text.RegularExpressions;
 
-namespace SubmissionTask.Services;
+namespace SubmissionTask.ClassLibrary.Services;
 
 ///<summary>
 /// Service för hantering av kontakter och använder interface IContactService.
