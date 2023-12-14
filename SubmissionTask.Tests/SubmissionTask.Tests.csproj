@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SubmissionTask.ClassLibrary\SubmissionTask.ClassLibrary.csproj" />
     <ProjectReference Include="..\SubmissionTask\SubmissionTask.csproj" />
   </ItemGroup>
 
