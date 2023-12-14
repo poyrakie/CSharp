@@ -6,6 +6,6 @@
 ///</summary>
 public interface IFileService
 {
-    bool SaveToFile(string content);
-    string LoadFromFile();
+    bool SaveToFile(string content, string _filePath);
+    string LoadFromFile(string _filePath);
 }

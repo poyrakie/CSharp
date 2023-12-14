@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using SubmissionTask.Interfaces;
-using SubmissionTask.Models;
+﻿using SubmissionTask.Interfaces;
 using SubmissionTask.Services;
 
 namespace SubmissionTask.Tests;
@@ -8,57 +6,61 @@ namespace SubmissionTask.Tests;
 public class FileService_Tests
 {
     [Fact]
-    public void SaveToFileShould_SaveJsonContactListToFile_ThenReturnTrue()
+    public void SaveToFileShould_ReturnTrue_IfFilePathExists()
     {
         // Arrange
-        List<IContact> testList = [];
+
         IFileService fileService = new FileService();
-        IContact contact = new Contact();
-        contact.FirstName = "Test";
-        contact.LastName = "Test";
-        contact.Email = "Test";
-        contact.PhoneNumber = "Test";
-        contact.City = "Test";
-        contact.Road = "Test";
-        contact.HouseNumber = "Test";
-        contact.PostalCode = "Test";
-        testList.Add(contact);
-
-        var json = JsonConvert.SerializeObject(testList, new JsonSerializerSettings
-        {
-            TypeNameHandling = TypeNameHandling.Objects,
-        });
-
+        string filePath = @"C:\Programmering\EC\CSharp\SubmissionTask\test.txt";
+        string content = "Test content";
 
         // Act
-        bool result = fileService.SaveToFile(json);
+        bool result = fileService.SaveToFile(content, filePath);
 
 
         // Assert
         Assert.True(result);
     }
     [Fact]
-    public void LoadFromFileShould_LoadContactListFromFile_ThenReturnListInString()
+    public void SaveToFileShould_ReturnFalse_IfFilePathDoesNotExists()
+    {
+        // Arrange
+
+        IFileService fileService = new FileService();
+        string filePath = @$"C:\Programmering\EC\CSharp\SubmissionTask\{Guid.NewGuid()}\test.txt";
+        string content = "Test content";
+
+        // Act
+        bool result = fileService.SaveToFile(content, filePath);
+
+
+        // Assert
+        Assert.False(result);
+    }
+    [Fact]
+    public void LoadFromFileShould_LoadContentFromFile_ThenReturnString()
     {
         // Arrange
         IFileService fileService = new FileService();
+        string filePath = @"C:\Programmering\EC\CSharp\SubmissionTask\test.txt";
 
         // Act
-        var content = fileService.LoadFromFile();
+        var content = fileService.LoadFromFile(filePath);
 
         // Assert
         Assert.NotNull(content);
     }
-    //[Fact]
-    //public void LoadFromFileShould_ReturnNull_WhenFileDoesNotExist()
-    //{
-    //    // Arrange
-    //    IFileService fileService = new FileService();
+    [Fact]
+    public void LoadFromFileShould_ReturnNull_WhenFileDoesNotExist()
+    {
+        // Arrange
+        IFileService fileService = new FileService();
+        string filePath = @$"C:\Programmering\EC\CSharp\SubmissionTask\{Guid.NewGuid()}\test.txt";
 
-    //    // Act
-    //    var content = fileService.LoadFromFile();
+        // Act
+        var content = fileService.LoadFromFile(filePath);
 
-    //    // Assert
-    //    Assert.Null(content);
-    //}
+        // Assert
+        Assert.Null(content);
+    }
 }

@@ -9,13 +9,10 @@ namespace SubmissionTask.Services;
 ///</summary>
 public class FileService : IFileService
 {
-    private readonly string _filePath = @"C:\Programmering\EC\CSharp\SubmissionTask\content.json";
-
-
     ///<summary>
     /// sparar innehåll till den angivna filen ovan. Returnerar bool baserat på operationens framgång.
     ///</summary>
-    public bool SaveToFile(string content)
+    public bool SaveToFile(string content, string _filePath)
     {
         try
         {
@@ -35,7 +32,7 @@ public class FileService : IFileService
     /// Raturnerar null om fil ej exsisterar eller något oväntat fel uppstår.
     /// Returnerar innehållet i filen i string format om fil exsisterar.
     ///</summary>
-    public string LoadFromFile()
+    public string LoadFromFile(string _filePath)
     {
         try
         {

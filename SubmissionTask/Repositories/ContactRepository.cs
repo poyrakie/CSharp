@@ -12,6 +12,7 @@ public class ContactRepository : IContactRepository
 {
     private List<IContact> _contactList;
     private readonly IFileService _fileService;
+    private readonly string _filePath = @"C:\Programmering\EC\CSharp\SubmissionTask\content.json";
 
     ///<summary>
     /// Konstruktor som tar emot IFileService för filhantering
@@ -40,7 +41,7 @@ public class ContactRepository : IContactRepository
                     TypeNameHandling = TypeNameHandling.Objects,
                 });
 
-                _fileService.SaveToFile(json);
+                _fileService.SaveToFile(json, _filePath);
                 return true;
             }
             else
@@ -62,7 +63,7 @@ public class ContactRepository : IContactRepository
     {
         try
         {
-            var content = _fileService.LoadFromFile();
+            var content = _fileService.LoadFromFile(_filePath);
             if (!string.IsNullOrEmpty(content))
             {
                 _contactList = JsonConvert.DeserializeObject<List<IContact>>(content, new JsonSerializerSettings
@@ -100,7 +101,7 @@ public class ContactRepository : IContactRepository
                     {
                         TypeNameHandling = TypeNameHandling.Objects,
                     });
-                    _fileService.SaveToFile(json);
+                    _fileService.SaveToFile(json, _filePath);
                     return true;
                 }
             }
