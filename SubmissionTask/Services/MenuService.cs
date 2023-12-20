@@ -186,7 +186,7 @@ public class MenuService(IContactService contactService) : IMenuService
         MenuTitle("REMOVE CONTACT");
         if (_contactService.ShowContact(i))
         {
-            if (_contactService.DeleteContact(i))
+            if (_contactService.DeleteContact())
             {
                 Console.ReadKey();
                 ShowAllContacts();

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             
+             xmlns:viewmodels="clr-namespace:SubmissionTaskMaui.ViewModels"
+             xmlns:models="clr-namespace:SubmissionTask.ClassLibrary.Models;assembly=SubmissionTask.ClassLibrary"
+             x:DataType="{x:Type viewmodels:AddViewModel}"
+             
+             x:Class="SubmissionTaskMaui.Views.AddPage"
+             Title="New Contact">
+    
+    <VerticalStackLayout Margin="20">
+        <Label Text="First name:" />
+        <Entry Text="{Binding Contact.FirstName}" />
+        <Label Text="Last name:" />
+        <Entry Text="{Binding Contact.LastName}" />
+        <Label Text="Email:" />
+        <Entry Text="{Binding Contact.Email}" />
+        <Label Text="Phone number:" />
+        <Entry Text="{Binding Contact.PhoneNumber}" />
+        <Label Text="City:" />
+        <Entry Text="{Binding Contact.City}" />
+        <Label Text="Street:" />
+        <Entry Text="{Binding Contact.Road}" />
+        <Label Text="House number:" />
+        <Entry Text="{Binding Contact.HouseNumber}" />
+        <Label Text="Postal Code:" />
+        <Entry Text="{Binding Contact.PostalCode}" />
+        <Button Text="Save" Command="{Binding AddCommand}" Margin="0,10,0,0" />
+    </VerticalStackLayout>
+</ContentPage>

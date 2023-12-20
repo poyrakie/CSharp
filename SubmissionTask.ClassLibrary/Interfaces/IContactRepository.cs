@@ -1,4 +1,5 @@
-﻿namespace SubmissionTask.ClassLibrary.Interfaces;
+﻿
+namespace SubmissionTask.ClassLibrary.Interfaces;
 
 ///<summary>
 /// Representerar ett interface för kontaktrepository, 
@@ -6,8 +7,10 @@
 ///</summary>
 public interface IContactRepository
 {
+    event EventHandler? ContactListUpdated;
+
     public bool AddToList(IContact contact);
     public IEnumerable<IContact> GetAllFromList();
-    public bool RemoveFromList(string email, int i);
+    public bool RemoveFromList(string email);
     public bool ScanListForEmail(string email);
 }

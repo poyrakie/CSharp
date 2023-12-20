@@ -73,7 +73,7 @@ public class ContactService(IContactRepository contactRepository) : IContactServ
     /// Bekräftas med användarinput för Email.
     /// Returnerar bool motsvarande operationens framgång
     ///</summary>
-    public bool DeleteContact(int i)
+    public bool DeleteContact()
     {
         try
         {
@@ -83,7 +83,7 @@ public class ContactService(IContactRepository contactRepository) : IContactServ
             {
                 Console.Write("\nPlease confirm by typing the email of the contact: ");
                 string email = Console.ReadLine()!;
-                if(_contactRepository.RemoveFromList(email, i))
+                if(_contactRepository.RemoveFromList(email))
                 {
                     Console.Write("Contact was deleted succesfully, returning to show all contacts ");
                     return true;

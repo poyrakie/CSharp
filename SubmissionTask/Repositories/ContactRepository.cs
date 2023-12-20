@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
 using SubmissionTask.ClassLibrary.Interfaces;
+using SubmissionTask.Interfaces;
 using System.Diagnostics;
 
-namespace SubmissionTask.ClassLibrary.Repositories;
+namespace SubmissionTask.Repositories;
 
 ///<summary>
 /// En repository för contacts som implementerar interface IContactRepository.
@@ -13,7 +14,6 @@ public class ContactRepository : IContactRepository
     private List<IContact> _contactList;
     private readonly IFileService _fileService;
     private readonly string _filePath = @"C:\Programmering\EC\CSharp\SubmissionTask\content.json";
-    public event EventHandler? ContactListUpdated;
 
     ///<summary>
     /// Konstruktor som tar emot IFileService för filhantering
@@ -43,7 +43,6 @@ public class ContactRepository : IContactRepository
                 });
 
                 _fileService.SaveToFile(json, _filePath);
-                ContactListUpdated?.Invoke(this, EventArgs.Empty);
                 return true;
             }
             else
@@ -93,7 +92,7 @@ public class ContactRepository : IContactRepository
     {
         try
         {
-            IContact contactToRemove = _contactList.FirstOrDefault(x => x.Email == email)!;
+            IContact contactToRemove = _contactList.FirstOrDefault(x => x.Email == email);
             if (contactToRemove != null)
             {
                 if (contactToRemove.Email == email)
@@ -104,7 +103,6 @@ public class ContactRepository : IContactRepository
                         TypeNameHandling = TypeNameHandling.Objects,
                     });
                     _fileService.SaveToFile(json, _filePath);
-                    ContactListUpdated?.Invoke(this, EventArgs.Empty);
                     return true;
                 }
             }

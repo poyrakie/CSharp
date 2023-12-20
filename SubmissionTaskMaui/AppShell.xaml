@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="SubmissionTaskMaui.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    
+    xmlns:views="clr-namespace:SubmissionTaskMaui.Views"
+    Shell.FlyoutBehavior="Disabled"
+    Title="SubmissionTaskMaui">
+
+    <ShellContent Title="All Contacts" ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage" />
+    <ShellContent Title="Add" ContentTemplate="{DataTemplate views:AddPage}" Route="AddPage" />
+    <ShellContent Title="Edit" ContentTemplate="{DataTemplate views:EditPage}" Route="EditPage" />
+
+</Shell>
