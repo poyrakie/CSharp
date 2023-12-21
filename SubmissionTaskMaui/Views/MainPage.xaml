@@ -24,7 +24,7 @@
                             </HorizontalStackLayout>
 
                             <HorizontalStackLayout Grid.Column="1">
-                                <Button Text="EDIT" CommandParameter="{Binding .}" Command="{Binding Path=NavigateToEditCommand, Source={RelativeSource AncestorType={x:Type viewmodels:MainViewModel}}}" Margin="5"/>
+                                <Button Text="INSPECT / EDIT" CommandParameter="{Binding .}" Command="{Binding Path=NavigateToEditCommand, Source={RelativeSource AncestorType={x:Type viewmodels:MainViewModel}}}" Margin="5"/>
                                 <Button Text="DELETE" CommandParameter="{Binding .}" Command="{Binding Path=RemoveCommand, Source={RelativeSource AncestorType={x:Type viewmodels:MainViewModel}}}" Margin="5"/>
                             </HorizontalStackLayout>
                         </Grid>

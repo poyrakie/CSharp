@@ -25,6 +25,11 @@
         <Entry Text="{Binding Contact.HouseNumber}" />
         <Label Text="Postal Code:" />
         <Entry Text="{Binding Contact.PostalCode}" />
-        <Button Text="Save" Command="{Binding UpdateCommand}" Margin="0,10,0,0" />
+        
+        <HorizontalStackLayout HorizontalOptions="Center" Margin=" 0,10,0,0">
+            <Button Text="Save" Command="{Binding UpdateCommand}" Margin="0,0,5,0" />
+            <Button Text="Return to main menu" Command="{Binding ReturnCommand}" Margin="5,0,0,0" />
+        </HorizontalStackLayout>
+
     </VerticalStackLayout>
 </ContentPage>

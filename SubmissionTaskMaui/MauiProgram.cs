@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using SubmissionTask.ClassLibrary.Interfaces;
 using SubmissionTask.ClassLibrary.Services;
-using SubmissionTask.ClassLibrary.Repositories;
+using SubmissionTask.Repositories;
 using SubmissionTaskMaui.ViewModels;
 using SubmissionTaskMaui.Views;
 

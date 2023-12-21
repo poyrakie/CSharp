@@ -2,7 +2,7 @@
 using SubmissionTask.ClassLibrary.Interfaces;
 using System.Diagnostics;
 
-namespace SubmissionTask.ClassLibrary.Repositories;
+namespace SubmissionTask.Repositories;
 
 ///<summary>
 /// En repository för contacts som implementerar interface IContactRepository.
@@ -33,7 +33,7 @@ public class ContactRepository : IContactRepository
     {
         try
         {
-            if (! _contactList.Any(x => x.Email == contact.Email)) 
+            if (!_contactList.Any(x => x.Email == contact.Email))
             {
                 _contactList.Add(contact);
 
@@ -51,10 +51,10 @@ public class ContactRepository : IContactRepository
                 return false;
             }
         }
-        catch (Exception ex) 
-        { 
+        catch (Exception ex)
+        {
             Debug.WriteLine(ex);
-            return false; 
+            return false;
         }
     }
 
@@ -112,6 +112,31 @@ public class ContactRepository : IContactRepository
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return false;
+    }
+
+    public bool Update(IContact contact)
+    {
+        try
+        {
+            IContact contactToUpdate = _contactList.FirstOrDefault(x => x.Email == contact.Email)!;
+            if (contactToUpdate != null)
+            {
+                contactToUpdate = contact;
+                var json = JsonConvert.SerializeObject(_contactList, new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Objects,
+                });
+                _fileService.SaveToFile(json, _filePath);
+                ContactListUpdated?.Invoke(this, EventArgs.Empty);
+                return true;
+            }
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return false;
+        }
     }
 
     ///<summary>

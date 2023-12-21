@@ -13,4 +13,5 @@ public interface IContactRepository
     public IEnumerable<IContact> GetAllFromList();
     public bool RemoveFromList(string email);
     public bool ScanListForEmail(string email);
+    bool Update(IContact contact);
 }

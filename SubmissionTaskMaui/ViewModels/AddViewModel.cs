@@ -20,4 +20,11 @@ public partial class AddViewModel(IContactRepository contactRepository) : Observ
         
         await Shell.Current.GoToAsync("//MainPage");
     }
+
+    [RelayCommand]
+    private async Task Return()
+    {
+        Contact = new Contact();
+        await Shell.Current.GoToAsync("//MainPage");
+    }
 }
