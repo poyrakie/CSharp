@@ -21,7 +21,7 @@ namespace SubmissionTaskMaui
                 });
 
 
-
+            // Initierar services för dependency injection
             builder.Services.AddSingleton<IContactRepository, ContactRepository>();
             builder.Services.AddSingleton<IFileService, FileService>();
 

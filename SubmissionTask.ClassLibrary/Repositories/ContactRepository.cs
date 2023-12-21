@@ -13,6 +13,7 @@ public class ContactRepository : IContactRepository
     private List<IContact> _contactList;
     private readonly IFileService _fileService;
     private readonly string _filePath = @"C:\Programmering\EC\CSharp\SubmissionTask\content.json";
+    // Eventhandler för att kommunicera med maui app vid förändringar i lista
     public event EventHandler? ContactListUpdated;
 
     ///<summary>
@@ -59,7 +60,8 @@ public class ContactRepository : IContactRepository
     }
 
     ///<summary>
-    /// Hämtar alla kontakter från fileservice och returnerar dom som IEnumerable lista
+    /// Hämtar alla kontakter från fileservice och returnerar som IEnumerable lista.
+    /// Returnar null om fil saknas.
     ///</summary>
     public IEnumerable<IContact> GetAllFromList()
     {
@@ -114,6 +116,11 @@ public class ContactRepository : IContactRepository
         return false;
     }
 
+    /// <summary>
+    /// try/catch metod för att ta bort kontakt från listan. Sparar sen den nya listan till fil, invoke för att kommunicera med maui app att omrenderas
+    /// </summary>
+    /// <param name="contact">Contact som ska tas bort</param>
+    /// <returns>bool motsvarande operationens framgång</returns>
     public bool Update(IContact contact)
     {
         try
