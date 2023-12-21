@@ -2,7 +2,7 @@
 using SubmissionTask.ClassLibrary.Interfaces;
 using System.Diagnostics;
 
-namespace SubmissionTask.Repositories;
+namespace SubmissionTask.ClassLibrary.Repositories;
 
 ///<summary>
 /// En repository för contacts som implementerar interface IContactRepository.
